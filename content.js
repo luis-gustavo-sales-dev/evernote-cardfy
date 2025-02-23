@@ -52,24 +52,29 @@ function capturarElementos() {
 
 // Função para criar e exibir o card na página
 function mostrarCard(elementos) {
-  // Verifica se o card já existe e remove para recriar
   let cardExistente = document.getElementById("extensao-card");
   if (cardExistente) {
       cardExistente.remove();
   }
+
+  let currentSlide = 0;
 
   // Criação do card
   let card = document.createElement("div");
   card.id = "extensao-card";
   card.innerHTML = `
       <div id="card-header">
-          <span>Conteúdo Capturado</span>
+          <span>Slide ${currentSlide + 1} de ${elementos.length}</span>
           <button id="fechar-card">X</button>
       </div>
-      <div id="card-content">${elementos.join("<hr>")}</div>
+      <div id="card-content">${elementos[currentSlide]}</div>
+      <div id="card-navigation">
+          <button id="prev-slide" ${currentSlide === 0 ? 'disabled' : ''}>Anterior</button>
+          <button id="next-slide" ${currentSlide === elementos.length - 1 ? 'disabled' : ''}>Próximo</button>
+      </div>
   `;
   
-  // Estilização do card
+  // Estilização do card (mantém a mesma)
   Object.assign(card.style, {
       position: "fixed",
       top: "50%",
@@ -87,17 +92,50 @@ function mostrarCard(elementos) {
       border: "2px solid #333"
   });
 
-  // Estilização do cabeçalho do card
-  let cardHeader = card.querySelector("#card-header");
-  Object.assign(cardHeader.style, {
+  // Estilização dos novos elementos de navegação
+  let cardNavigation = card.querySelector("#card-navigation");
+  Object.assign(cardNavigation.style, {
       display: "flex",
       justifyContent: "space-between",
-      alignItems: "center",
-      fontWeight: "bold",
-      marginBottom: "10px"
+      marginTop: "20px",
+      padding: "10px"
   });
 
-  // Estilização do botão de fechar
+  let navigationButtons = card.querySelectorAll("#card-navigation button");
+  navigationButtons.forEach(button => {
+      Object.assign(button.style, {
+          padding: "8px 16px",
+          background: "#007BFF",
+          color: "white",
+          border: "none",
+          borderRadius: "4px",
+          cursor: "pointer"
+      });
+  });
+
+  // Funcionalidade de navegação
+  const updateSlide = () => {
+      card.querySelector("#card-content").innerHTML = elementos[currentSlide];
+      card.querySelector("#card-header span").textContent = `Slide ${currentSlide + 1} de ${elementos.length}`;
+      card.querySelector("#prev-slide").disabled = currentSlide === 0;
+      card.querySelector("#next-slide").disabled = currentSlide === elementos.length - 1;
+  };
+
+  card.querySelector("#prev-slide").addEventListener("click", () => {
+      if (currentSlide > 0) {
+          currentSlide--;
+          updateSlide();
+      }
+  });
+
+  card.querySelector("#next-slide").addEventListener("click", () => {
+      if (currentSlide < elementos.length - 1) {
+          currentSlide++;
+          updateSlide();
+      }
+  });
+
+  // Mantém o mesmo código para o botão de fechar
   let botaoFechar = card.querySelector("#fechar-card");
   Object.assign(botaoFechar.style, {
       background: "red",
@@ -108,12 +146,10 @@ function mostrarCard(elementos) {
       padding: "5px"
   });
 
-  // Evento de clique para fechar o card
   botaoFechar.addEventListener("click", () => {
       card.remove();
   });
 
-  // Adiciona o card ao corpo da página
   document.body.appendChild(card);
 }
 
