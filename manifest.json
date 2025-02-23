@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Evernote-Cardfy",
+  "version": "1.0",
+  "description": "Captura texto de divs com a classe 'para' e exibe no console.",
+  "permissions": [
+    "scripting", 
+    "activeTab"
+  ],
+  "host_permissions": ["<all_urls>"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  }
+}
