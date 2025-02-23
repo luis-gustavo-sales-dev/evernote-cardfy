@@ -74,33 +74,48 @@ function mostrarCard(elementos) {
       </div>
   `;
   
-  // Estilização do card (mantém a mesma)
+  // Atualização da estilização do card
   Object.assign(card.style, {
       position: "fixed",
       top: "50%",
       left: "50%",
       transform: "translate(-50%, -50%)",
-      width: "60%",
-      height: "50%",
+      width: "75%",
+      height: "75%",
       background: "white",
       color: "black",
       padding: "20px",
       boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
       borderRadius: "10px",
-      overflow: "auto",
       zIndex: "10000",
-      border: "2px solid #333"
+      border: "2px solid #333",
+      display: "flex",
+      flexDirection: "column"
   });
 
-  // Estilização dos novos elementos de navegação
+  // Atualização da estilização do conteúdo
+  let cardContent = card.querySelector("#card-content");
+  Object.assign(cardContent.style, {
+      flex: "1",
+      overflowY: "auto",
+      padding: "10px",
+      marginBottom: "10px",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center"
+  });
+
+  // Atualização da estilização da navegação
   let cardNavigation = card.querySelector("#card-navigation");
   Object.assign(cardNavigation.style, {
       display: "flex",
       justifyContent: "space-between",
-      marginTop: "20px",
-      padding: "10px"
+      padding: "10px",
+      borderTop: "1px solid #ccc",
+      marginTop: "auto"
   });
 
+  // Estilização dos novos elementos de navegação
   let navigationButtons = card.querySelectorAll("#card-navigation button");
   navigationButtons.forEach(button => {
       Object.assign(button.style, {
