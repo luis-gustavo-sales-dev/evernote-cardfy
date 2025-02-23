@@ -6,7 +6,7 @@ function capturarElementos() {
   let iframe = document.querySelector('iframe[src="/ce"]');
   let divs = [];
   if (iframe && iframe.contentDocument) {
-    divs = iframe.contentDocument.querySelectorAll("div.para");
+    divs = iframe.contentDocument.querySelectorAll("div.para, h1, h2, h3, h4");
   }
 
   // Cria um array com os elementos completos (HTML incluindo atributos e subelementos)
