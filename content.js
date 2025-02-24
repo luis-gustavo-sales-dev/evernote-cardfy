@@ -79,8 +79,12 @@ function mostrarCard(elementos) {
       </div>
       <div id="card-content">${elementos[currentSlide]}</div>
       <div id="card-navigation">
-          <button id="prev-slide" ${currentSlide === 0 ? 'disabled' : ''}>Anterior</button>
-          <button id="next-slide" ${currentSlide === elementos.length - 1 ? 'disabled' : ''}>Próximo</button>
+          <button id="prev-slide" style="padding: 4px 8px; background: rgb(0, 123, 255); color: white; border: none; border-radius: 4px; cursor: pointer;" ${currentSlide === 0 ? 'disabled' : ''}>Anterior</button>
+          <div id="direct-navigation">
+              <input type="number" id="slide-number" min="1" max="${elementos.length}" value="${currentSlide + 1}">
+              <button id="go-to-slide">Ir</button>
+          </div>
+          <button id="next-slide" style="padding: 4px 8px; background: rgb(0, 123, 255); color: white; border: none; border-radius: 4px; cursor: pointer;" ${currentSlide === elementos.length - 1 ? 'disabled' : ''}>Próximo</button>
       </div>
   `;
   
@@ -120,22 +124,54 @@ function mostrarCard(elementos) {
   Object.assign(cardNavigation.style, {
       display: "flex",
       justifyContent: "space-between",
+      alignItems: "center",
       padding: "10px",
       borderTop: "1px solid #ccc",
-      marginTop: "auto"
+      marginTop: "auto",
+      gap: "10px"
   });
 
-  // Estilização dos novos elementos de navegação
-  let navigationButtons = card.querySelectorAll("#card-navigation button");
-  navigationButtons.forEach(button => {
-      Object.assign(button.style, {
-          padding: "8px 16px",
-          background: "#007BFF",
-          color: "white",
-          border: "none",
-          borderRadius: "4px",
-          cursor: "pointer"
-      });
+  // Estilizar área de navegação direta
+  let directNav = card.querySelector("#direct-navigation");
+  Object.assign(directNav.style, {
+      display: "flex",
+      gap: "5px",
+      alignItems: "center"
+  });
+
+  let slideInput = card.querySelector("#slide-number");
+  Object.assign(slideInput.style, {
+      width: "60px",
+      padding: "4px",
+      textAlign: "center"
+  });
+
+  let goButton = card.querySelector("#go-to-slide");
+  Object.assign(goButton.style, {
+      padding: "4px 8px",
+      background: "#007BFF",
+      color: "white",
+      border: "none",
+      borderRadius: "4px",
+      cursor: "pointer"
+  });
+
+  // Adicionar funcionalidade de navegação direta
+  const goToSlide = () => {
+      let newSlide = parseInt(slideInput.value) - 1;
+      if (newSlide >= 0 && newSlide < elementos.length) {
+          currentSlide = newSlide;
+          updateSlide();
+      } else {
+          slideInput.value = currentSlide + 1;
+      }
+  };
+
+  goButton.addEventListener("click", goToSlide);
+  slideInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+          goToSlide();
+      }
   });
 
   // Funcionalidade de navegação
@@ -144,6 +180,7 @@ function mostrarCard(elementos) {
       card.querySelector("#card-header span").textContent = `Slide ${currentSlide + 1} de ${elementos.length}`;
       card.querySelector("#prev-slide").disabled = currentSlide === 0;
       card.querySelector("#next-slide").disabled = currentSlide === elementos.length - 1;
+      card.querySelector("#slide-number").value = currentSlide + 1;
   };
 
   card.querySelector("#prev-slide").addEventListener("click", () => {
