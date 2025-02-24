@@ -6,8 +6,11 @@ function capturarElementos() {
   let iframe = document.querySelector('iframe[src="/ce"]');
   let divs = [];
   if (iframe && iframe.contentDocument) {
-    divs = iframe.contentDocument.querySelectorAll("div.para, h1, h2, h3, h4");
+    divs = iframe.contentDocument.querySelectorAll("div.para, div.en-media-image, h1, h2, h3, h4");
   }
+
+
+
 
   // Cria um array com os elementos completos (HTML incluindo atributos e subelementos)
   let elementos = Array.from(divs).map(div => {
@@ -22,6 +25,13 @@ function capturarElementos() {
         span.style.removeProperty("--lightmode-color");
       }
     });
+
+    // Adiciona style width: 75% para tags <img> dentro da div
+    let imgs = clone.querySelectorAll("img");
+    imgs.forEach(img => {
+      img.style.width = "75%";
+    });
+
     return clone.outerHTML;
   });
 
